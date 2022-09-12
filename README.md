@@ -3,3 +3,4 @@ A application that displays your pc stats and what you are listening to on spoti
 
 # Credits
 Stack Overflow 💀
+# TODO List
