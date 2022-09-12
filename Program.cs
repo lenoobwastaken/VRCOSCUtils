@@ -91,7 +91,7 @@ namespace OSC_Funnies
             {
                 return $"Idling on Spotify || CPU: {Math.Round(getCurrentCpuUsage())}% || RAM: {(Math.Round((capacity - available) / capacity * 100, 0)).ToString()}%  || GPU: { Math.Round(GetGPUUsage())}%";
             }
-            if (CurrentSong == "Spotify" || CurrentSong == "Adverstisement")
+            if (CurrentSong == "Spotify" || CurrentSong == "Advertisement")
             {
                 return $"Listening To A Ad :( || CPU: {Math.Round(getCurrentCpuUsage())}% || RAM: {(Math.Round((capacity - available) / capacity * 100, 0)).ToString()}%  || GPU: { Math.Round(GetGPUUsage())}%";
 
