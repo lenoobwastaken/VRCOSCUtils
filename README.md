@@ -8,3 +8,4 @@ Stack Overflow 💀
 # TODO List
 - Customizable animated clantag 
 - More utilization of the OSC System
+- Make the code more readble and optimized
