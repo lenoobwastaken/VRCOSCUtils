@@ -1,7 +1,8 @@
 # VRCOSCSpotify
-A application that displays your pc stats and what you are listening to on spotify
+A application that displays your pc stats and what you are listening to on spotify on VRChat using the OSC System
 
 # Credits
 Stack Overflow 💀
 # Preview
-![joe](https://i.imgur.com/9MZ1R15.jpg)
+![joe](https: //i.imgur.com/9MZ1R15.jpg)
+g
