@@ -1,3 +1,6 @@
+# IMPORTANT
+ - ENABLE OSC INSIDE THE ACTION MENU (THE TINY MENU)
+ - INSTALL 
 # VRCOSCSpotify
 A application that displays your pc stats and what you are listening to on spotify on VRChat using the OSC System
 
