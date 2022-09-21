@@ -9,6 +9,6 @@ Stack Overflow 💀
 # Preview
 ![joe](https://i.imgur.com/9MZ1R15.jpg)
 # TODO List
-- Customizable animated clantag 
+- Customizable animated clantag (DONE!)
 - More utilization of the OSC System
 - Make the code more readble and optimized
