@@ -11,4 +11,4 @@ Stack Overflow 💀
 # TODO List
 - Customizable animated clantag (DONE!)
 - More utilization of the OSC System
-- Make the code more readble and optimized
+- Ui 
