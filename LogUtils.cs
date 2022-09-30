@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 using Colorful;
 using Console = Colorful.Console;
 
-namespace OSC_Funnies
+namespace VRCOSCUtils
 {
     public static class LogUtils
     {
         public static void Error(string Message)
         {
-            Console.Write($"{Message}", System.Drawing.Color.Red);
+            Console.Write($"{Message}\n", System.Drawing.Color.Red);
         }
         public static void Log(string Message)
         {
