@@ -165,7 +165,7 @@ namespace VRCOSCUtils
         {
             while (true)
             {
-                oscSender.Send(new OscMessage("/chatbox/input", GetSpotifySong(), true, true));
+                oscSender.Send(new OscMessage("/chatbox/input", GetSoundPad(), true, true));
                 LogUtils.Log("Sent Current Song!");
                 Thread.Sleep(10);
                 CurrentSongCheck = CurrentSong;
