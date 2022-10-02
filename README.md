@@ -1,5 +1,5 @@
 # IMPORTANT
- - ENABLE OSC INSIDE THE ACTION MENU (THE TINY MENU) (options/OSC/Enabled)
+ - ENABLE OSC INSIDE THE ACTION MENU (THE TINY MENU) (options/OSC/Enabled) THEN RESTART YOUR GAME AND VOILA! IT SHOULD WORK
 # VRCOSCSpotify
 A application that displays your pc stats and what you are listening to on spotify on VRChat using the OSC System
 
