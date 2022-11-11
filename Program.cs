@@ -6,7 +6,7 @@ using System.Management;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using SharpOSC;
+using CoreOSC;
 using VRCOSCUtils;
 using System.IO;
 using System.Text;
