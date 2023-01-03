@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -14,11 +14,12 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Timers;
 using Timer = System.Threading.Timer;
-
+using WindowsMediaController;
 namespace VRCOSCUtils
 {
     class Program
     {
+        private static readonly MediaManager mediaManager = new MediaManager();
 
         public static float GetGPUUsage()
         {
@@ -66,47 +67,7 @@ namespace VRCOSCUtils
         public static UDPSender oscSender;
         public static UDPDuplex oscListener;
 
-        public static string GetSpotifySong()
-        {
-            //https://stackoverflow.com/questions/37854194/get-current-song-name-for-a-local-application
-            var SpotifyProcess = Process.GetProcessesByName("Spotify").FirstOrDefault(p => !string.IsNullOrWhiteSpace(p.MainWindowTitle));
-            if (SpotifyProcess == null)
-            {
-                LogUtils.Error("[Error] Spotify is not opened");
-            }
-            var wmiObject = new ManagementObjectSearcher("select * from Win32_OperatingSystem");
-            ManagementClass cimobject1 = new ManagementClass("Win32_PhysicalMemory");
-            ManagementObjectCollection moc1 = cimobject1.GetInstances();
-            double available = 0, capacity = 0;
-            foreach (ManagementObject mo1 in moc1)
-            {
-                capacity += ((Math.Round(Int64.Parse(mo1.Properties["Capacity"].Value.ToString()) / 1024 / 1024 / 1024.0, 1)));
-            }
-            moc1.Dispose();
-            cimobject1.Dispose();
 
-
-            ManagementClass cimobject2 = new ManagementClass("Win32_PerfFormattedData_PerfOS_Memory");
-            ManagementObjectCollection moc2 = cimobject2.GetInstances();
-            foreach (ManagementObject mo2 in moc2)
-            {
-                available += ((Math.Round(Int64.Parse(mo2.Properties["AvailableMBytes"].Value.ToString()) / 1024.0, 1)));
-
-            }
-            moc2.Dispose();
-            cimobject2.Dispose();
-            CurrentSong = SpotifyProcess.MainWindowTitle;
-            if (CurrentSong == "Spotify Free" || CurrentSong == "Spotify Premium")
-            {
-                return $"Idling on Spotify || CPU: {Math.Round(getCurrentCpuUsage())}% || RAM: {(Math.Round((capacity - available) / capacity * 100, 0)).ToString()}%  || GPU: { Math.Round(GetGPUUsage())}%";
-            }
-            if (CurrentSong == "Spotify" || CurrentSong == "Advertisement")
-            {
-                return $"Listening To A Ad :( || CPU: {Math.Round(getCurrentCpuUsage())}% || RAM: {(Math.Round((capacity - available) / capacity * 100, 0)).ToString()}%  || GPU: { Math.Round(GetGPUUsage())}%";
-
-            }
-            return $"{SpotifyProcess.MainWindowTitle} || CPU: {Math.Round(getCurrentCpuUsage())}% || RAM: {(Math.Round((capacity - available) / capacity * 100, 0)).ToString()}%  || GPU: { Math.Round(GetGPUUsage())}%";
-        }
         public static string GetSoundPad()
         {
             var SoundPadProc = Process.GetProcessesByName("Soundpad").FirstOrDefault(SP => !string.IsNullOrEmpty(SP.MainWindowTitle));
@@ -165,17 +126,7 @@ namespace VRCOSCUtils
             return String.Format("{0:00}:{1:00}:{2:00}",
             WatchTimeSpan.Hours, WatchTimeSpan.Minutes, WatchTimeSpan.Seconds); 
         }
-        public static Task UpdateOSC()
-        {
-            while (true)
-            {
-                oscSender.Send(new OscMessage("/chatbox/input", GetSpotifySong(), true, true));
-                LogUtils.Log("Sent Current Song!");
-                Thread.Sleep(10);
-                CurrentSongCheck = CurrentSong;
-
-            }
-        }
+        
         #region https://github.com/NYAN-x-CAT/LimeLogger/blob/master/LimeLogger/LimeLogger.cs 
 
 
@@ -473,7 +424,7 @@ namespace VRCOSCUtils
             {
                 
                 case "1":
-                    UpdateOSC();
+                    Utilities.InitMedia();
                     break;
                 case "2":
                     ClanTagChanger(File.ReadAllText(Environment.CurrentDirectory + "\\CustomName.txt"));
@@ -590,7 +541,9 @@ namespace VRCOSCUtils
         static void Main(string[] args)
         {
             //oscListener = new UDPDuplex("127.0.0.1", 9000, 9001, OnReceive );
-           // Console.ReadKey();
+            // Console.ReadKey();
+#if !DEBUG
+
             oscSender = new UDPSender("127.0.0.1", 9000);
             Init();
             LogUtils.Logo();
@@ -599,7 +552,7 @@ namespace VRCOSCUtils
             switch (s)
             {
                 case "1":
-                    UpdateOSC();
+                    Utilities.InitMedia();
                     break;
                 case "2":
                     ClanTagChanger(File.ReadAllText(Environment.CurrentDirectory + "\\CustomName.txt"));
@@ -617,7 +570,7 @@ namespace VRCOSCUtils
                     Watch = Stopwatch.StartNew();
                     Watch.Start();
                     Application.Run();
-                    
+
                     break;
                 case "6":
                     KeyFrameInput();
@@ -625,7 +578,13 @@ namespace VRCOSCUtils
                 default:
                     Redo();
                     break;
-            }
+            }   
+#endif
+#if DEBUG
+            Utilities.InitMedia();
+#endif
         }
+        
     }
 }
+
