@@ -5,9 +5,11 @@
 A application that displays your pc stats and what you are listening to on spotify on VRChat using the OSC System
 
 # Credits
-Stack Overflow 💀
+- Stack Overflow 💀 
+- DubyaDude for mediacontrol
 # Preview
-![joe](https://i.imgur.com/9MZ1R15.jpg)
+![joe](https://i.imgur.com/cqY9qTl.png)
+![joe1](https://i.imgur.com/hTnOjE6.png)
 ![joe2](https://i.imgur.com/mzqAXXU.jpg)
 # TODO List
 - Customizable animated clantag (DONE!)
