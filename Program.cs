@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -580,19 +580,7 @@ namespace VRCOSCUtils
                     break;
             }   
 #endif
-#if DEBUG
-           // var perfrequency = SDL2.SDL.SDL_GetPerformanceFrequency();
-           // var perfcounter = SDL2.SDL.SDL_GetPerformanceCounter();
-          //  Console.WriteLine($"freq: {perfrequency} || Counter: {perfcounter}");
-            while (true)
-            {
-                var perfrequency = SDL2.SDL.SDL_GetPerformanceFrequency();
-                var perfcounter = SDL2.SDL.SDL_GetPerformanceCounter();
 
-                Console.WriteLine($"freq: {perfrequency} || Counter: {perfcounter}");
-
-            }
-#endif 
         }
 
     }
