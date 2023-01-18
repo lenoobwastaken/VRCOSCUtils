@@ -581,10 +581,20 @@ namespace VRCOSCUtils
             }   
 #endif
 #if DEBUG
-            Utilities.InitMedia();
-#endif
+           // var perfrequency = SDL2.SDL.SDL_GetPerformanceFrequency();
+           // var perfcounter = SDL2.SDL.SDL_GetPerformanceCounter();
+          //  Console.WriteLine($"freq: {perfrequency} || Counter: {perfcounter}");
+            while (true)
+            {
+                var perfrequency = SDL2.SDL.SDL_GetPerformanceFrequency();
+                var perfcounter = SDL2.SDL.SDL_GetPerformanceCounter();
+
+                Console.WriteLine($"freq: {perfrequency} || Counter: {perfcounter}");
+
+            }
+#endif 
         }
-        
+
     }
 }
 

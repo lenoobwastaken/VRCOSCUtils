@@ -11,7 +11,7 @@ using System.Management;
 using Windows.Media.Control;
 using Windows.Media.Core;
 using CoreOSC;
-
+//using SDL2;
 namespace VRCOSCUtils
 {
     internal class Utilities
@@ -98,6 +98,11 @@ namespace VRCOSCUtils
             Thread.Sleep(1000);
             return (dynamic)cpuCounter.NextValue();
         }
+        public static string GetFPS()
+        {
+         //  var s =  SDL2.SDL.SDL_GetPerformanceCounter();
+           return "";
+        }
         public static string GetCPU()
         {
             return $"{Math.Round(getCurrentCpuUsage())}%";
@@ -153,10 +158,16 @@ namespace VRCOSCUtils
 
         public static string MainInfo()
         {
-            if (currentSession  != null && currentproperties != null)
+            if (currentSession  != null && currentproperties != null )
             {
+                if (currentSession.ControlSession.GetPlaybackInfo().PlaybackStatus == GlobalSystemMediaTransportControlsSessionPlaybackStatus.Paused)
+                {
+                    return $"[Paused] {currentproperties.Artist} - {currentproperties.Title} || {currentSession.ControlSession.GetTimelineProperties().Position.ToString(@"mm\:ss")}/{currentSession.ControlSession.GetTimelineProperties().EndTime.ToString(@"mm\:ss")}";
+
+                }
                 return $"{currentproperties.Artist} - {currentproperties.Title} || {currentSession.ControlSession.GetTimelineProperties().Position.ToString(@"mm\:ss")}/{currentSession.ControlSession.GetTimelineProperties().EndTime.ToString(@"mm\:ss")}";
             }
+            
             return "";
         }
         #region Credits to dubya dude for this
@@ -174,8 +185,13 @@ namespace VRCOSCUtils
         }
         private static void MediaManager_OnAnyMediaPropertyChanged(MediaManager.MediaSession sender, GlobalSystemMediaTransportControlsSessionMediaProperties args)
         {
-            currentSession = sender;
-            currentproperties = args;
+            if (sender.Id == "Spotify.exe")
+            {
+                currentSession = sender;
+                currentproperties = args;
+
+            }
+            
             //LogUtils.Log(MainInfo());
         }
         public static GlobalSystemMediaTransportControlsSessionMediaProperties currentproperties = null;
