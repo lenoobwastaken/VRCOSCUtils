@@ -321,30 +321,28 @@ namespace VRCOSCUtils
                     //   Console.WriteLine(DateTime.Now.ToString() + "." + DateTime.Now.Millisecond.ToString());
                     // Console.WriteLine();
 
-                    lock (sync)
+
+                    t2 = watch.ElapsedMilliseconds;
+                    t1 = t2 - dt;
+
+                    foreach (var x in frames.Values)
                     {
-                        t2 = watch.ElapsedMilliseconds;
-                        t1 = t2 - dt;
-
-                        foreach (var x in frames.Values)
+                        if (x.Name == "VRChat")
                         {
-                            if (x.Name == "VRChat")
-                            {
-                                //Console.Write("VRChat: ");
-                                //get the number of frames
-                                int count = x.QueryCount(t1, t2);
+                            //Console.Write("VRChat: ");
+                            //get the number of frames
+                            int count = x.QueryCount(t1, t2);
 
-                                //calculate FPS
-                                //  Console.WriteLine("{0} FPS", (double)count / dt * 1000.0);
-                                currentfps = $"{Math.Round((double)count / dt * 1000.0)}";
-                                //  Console.WriteLine(currentfps);
-                                Program.oscSender.Send(new OscMessage("/chatbox/input", $"{SpotifyInfo()} || CPU: {GetCPU()} || RAM: {GetRAM()} || GPU: {GetGPU()} || FPS: {currentfps}", true, true));
-                                LogUtils.Log("Sent!");
-
-                            }
-
+                            //calculate FPS
+                            //  Console.WriteLine("{0} FPS", (double)count / dt * 1000.0);
+                            currentfps = $"{Math.Round((double)count / dt * 1000.0)}";
+                            //  Console.WriteLine(currentfps);
+                            Program.oscSender.Send(new OscMessage("/chatbox/input", $"{SpotifyInfo()} || CPU: {GetCPU()} || RAM: {GetRAM()} || GPU: {GetGPU()} || FPS: {currentfps}", true, true));
+                            LogUtils.Log("Sent!");
 
                         }
+
+
                     }
                 }
                 //Thread.Sleep(1500);
