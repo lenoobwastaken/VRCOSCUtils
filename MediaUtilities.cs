@@ -90,7 +90,7 @@ namespace VRCOSCUtils
                     _ = x.NextValue();
                 });
 
-                Thread.Sleep(1000);
+                Thread.Sleep(500);
 
                 gpuCounters.ForEach(x =>
                 {
@@ -105,13 +105,18 @@ namespace VRCOSCUtils
                 return 0f;
             }
         }
+        
+
+      
         public static string GetGPU()
         {
             return $"{Math.Round(GetGPUUsage())}%";
         }
+        public static ManagementClass cimobject1;
+
         public static string GetRAM()
         {
-            var wmiObject = new ManagementObjectSearcher("select * from Win32_OperatingSystem");
+          //  var wmiObject = new ManagementObjectSearcher("select * from Win32_OperatingSystem");
             ManagementClass cimobject1 = new ManagementClass("Win32_PhysicalMemory");
             ManagementObjectCollection moc1 = cimobject1.GetInstances();
             double available = 0, capacity = 0;
@@ -134,21 +139,16 @@ namespace VRCOSCUtils
             cimobject2.Dispose();
             return $"{(Math.Round((capacity - available) / capacity * 100, 0)).ToString()}%";
         }
+        public static PerformanceCounter cpuCounter;
         public static float getCurrentCpuUsage()
         {
-            PerformanceCounter cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
-            var s = cpuCounter.NextValue();
-            Thread.Sleep(1000);
-            return (dynamic)cpuCounter.NextValue();
+            
+            return (int)cpuCounter.NextValue();
         }
-        public static string GetFPS()
-        {
-         //  var s =  SDL2.SDL.SDL_GetPerformanceCounter();
-           return "";
-        }
+       
         public static string GetCPU()
         {
-            return $"{Math.Round(getCurrentCpuUsage())}%";
+            return $"{getCurrentCpuUsage()}%";
         }
         public  enum MediaType : int
         {
@@ -172,10 +172,12 @@ namespace VRCOSCUtils
             mediaManager.OnAnyMediaPropertyChanged += MediaManager_OnAnyMediaPropertyChanged;
 
             mediaManager.Start();
+            cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total", Environment.MachineName);
+            cimobject1 = new ManagementClass("Win32_PhysicalMemory");
 
 #if !DEBUG
 
-       
+
             m_EtwSession = new TraceEventSession("mysess");
             m_EtwSession.StopOnDispose = true;
             m_EtwSession.EnableProvider("Microsoft-Windows-D3D9");
@@ -321,28 +323,30 @@ namespace VRCOSCUtils
                     //   Console.WriteLine(DateTime.Now.ToString() + "." + DateTime.Now.Millisecond.ToString());
                     // Console.WriteLine();
 
-
-                    t2 = watch.ElapsedMilliseconds;
-                    t1 = t2 - dt;
-
-                    foreach (var x in frames.Values)
+                    lock (sync)
                     {
-                        if (x.Name == "VRChat")
-                        {
-                            //Console.Write("VRChat: ");
-                            //get the number of frames
-                            int count = x.QueryCount(t1, t2);
+                        t2 = watch.ElapsedMilliseconds;
+                        t1 = t2 - dt;
 
-                            //calculate FPS
-                            //  Console.WriteLine("{0} FPS", (double)count / dt * 1000.0);
-                            currentfps = $"{Math.Round((double)count / dt * 1000.0)}";
-                            //  Console.WriteLine(currentfps);
-                            Program.oscSender.Send(new OscMessage("/chatbox/input", $"{SpotifyInfo()} || CPU: {GetCPU()} || RAM: {GetRAM()} || GPU: {GetGPU()} || FPS: {currentfps}", true, true));
-                            LogUtils.Log("Sent!");
+                        foreach (var x in frames.Values)
+                        {
+                            if (x.Name == "VRChat")
+                            {
+                                //Console.Write("VRChat: ");
+                                //get the number of frames
+                                int count = x.QueryCount(t1, t2);
+
+                                //calculate FPS
+                                //  Console.WriteLine("{0} FPS", (double)count / dt * 1000.0);
+                                currentfps = $"{Math.Round((double)count / dt * 1000.0)}";
+                                //  Console.WriteLine(currentfps);
+                                Program.oscSender.Send(new OscMessage("/chatbox/input", $"{SpotifyInfo()} || CPU: {GetCPU()} || RAM: {GetRAM()} || GPU: {GetGPU()}", true, true));
+                                LogUtils.Log("Sent!");
+                                Thread.Sleep(1500);
+                            }
+
 
                         }
-
-
                     }
                 }
                 //Thread.Sleep(1500);
@@ -356,14 +360,14 @@ namespace VRCOSCUtils
                 if (NoStats == true)
 
                 {
-                    Program.oscSender.Send(new OscMessage("/chatbox/input", $"{SpotifyInfo()}", true, true));
+                    Program.oscSender.Send(new OscMessage("/chatbox/input", $"{SoundpadInfo()}", true, true));
                     LogUtils.Log("Sent!");
 
                     Thread.Sleep(1500);
                 }
                 else
                 {
-                    Program.oscSender.Send(new OscMessage("/chatbox/input", $"{SpotifyInfo()} || CPU: {GetCPU()} || RAM: {GetRAM()} || GPU: {GetGPU()}", true, true));
+                    Program.oscSender.Send(new OscMessage("/chatbox/input", $"{SoundpadInfo()}", true, true));
                     LogUtils.Log("Sent!");
                 }
                 //Thread.Sleep(1500);
