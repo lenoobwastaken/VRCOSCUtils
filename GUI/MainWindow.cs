@@ -14,15 +14,15 @@ namespace VRChatify
         private static string oscText = Config.GetConfig("oscText") ?? "{SONG} - {ARTIST} | CPU: {CPU}% | RAM: {RAM}% | GPU: {GPU}% | Time: {TIME} | {CLANTAG}";
         public MainWindow()
         {
-            AutoUpdater.InstalledVersion = new Version(VRChatify.Version);
-            AutoUpdater.Start("https://raw.githubusercontent.com/Oli-idk/VRChatify/main/AutoUpdateInfo.xml");
+            //AutoUpdater.InstalledVersion = new Version(VRChatify.Version);
+            //AutoUpdater.Start("https://raw.githubusercontent.com/Oli-idk/VRChatify/main/AutoUpdateInfo.xml");
             InitializeComponent();
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
             //set window title to app version
-            Text = $"VRChatify: {VRChatify.Version}";
+            Text = $"VRCOSCUtils";
             //   oscMessage.Text = oscText;
             ClanTag.Text = Config.GetConfig("clantag") ?? "VRChatify";
             VRChatify.ClanTagStrings = VRChatifyUtils.ClanTagText(ClanTag.Text);

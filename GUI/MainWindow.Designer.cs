@@ -1,4 +1,5 @@
-﻿namespace VRChatify
+﻿
+namespace VRChatify
 {
     partial class MainWindow
     {

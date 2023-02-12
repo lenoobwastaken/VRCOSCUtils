@@ -1,0 +1,11 @@
+C:\Users\User\Downloads\VRCOSCUtils\Output\GUI\VRCOSCUtilsGUI.exe.config
+C:\Users\User\Downloads\VRCOSCUtils\Output\GUI\VRCOSCUtilsGUI.exe
+C:\Users\User\Downloads\VRCOSCUtils\Output\GUI\VRCOSCUtilsGUI.pdb
+C:\Users\User\Downloads\VRCOSCUtils\GUI\obj\Release\GUI.csproj.AssemblyReference.cache
+C:\Users\User\Downloads\VRCOSCUtils\GUI\obj\Release\GUI.csproj.SuggestedBindingRedirects.cache
+C:\Users\User\Downloads\VRCOSCUtils\GUI\obj\Release\GUI.csproj.CoreCompileInputs.cache
+C:\Users\User\Downloads\VRCOSCUtils\GUI\obj\Release\GUI.csproj.CopyComplete
+C:\Users\User\Downloads\VRCOSCUtils\GUI\obj\Release\VRCOSCUtilsGUI.exe
+C:\Users\User\Downloads\VRCOSCUtils\GUI\obj\Release\VRCOSCUtilsGUI.pdb
+C:\Users\User\Downloads\VRCOSCUtils\GUI\obj\Release\VRChatify.MainWindow.resources
+C:\Users\User\Downloads\VRCOSCUtils\GUI\obj\Release\GUI.csproj.GenerateResource.cache
