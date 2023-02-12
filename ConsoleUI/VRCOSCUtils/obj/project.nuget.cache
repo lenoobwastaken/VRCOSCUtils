@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "dgSpecHash": "+deDubDjXTVXbE0ohg/sKUNLHylrK8cIxNTXdRDAMs3FiUwgH+Zx19yeiSO6ABJplM74RI0wnHzZQuMq5TkUwg==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\User\\Downloads\\VRCOSCUtils\\ConsoleUI\\VRCOSCUtils\\ConsoleUI.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\User\\.nuget\\packages\\dubya.windowsmediacontroller\\2.4.0\\dubya.windowsmediacontroller.2.4.0.nupkg.sha512",
+    "C:\\Users\\User\\.nuget\\packages\\microsoft.diagnostics.tracing.traceevent\\3.0.7\\microsoft.diagnostics.tracing.traceevent.3.0.7.nupkg.sha512",
+    "C:\\Users\\User\\.nuget\\packages\\microsoft.visualstudio.interop\\17.4.33103.184\\microsoft.visualstudio.interop.17.4.33103.184.nupkg.sha512",
+    "C:\\Users\\User\\.nuget\\packages\\microsoft.visualstudio.ole.interop\\17.4.33103.184\\microsoft.visualstudio.ole.interop.17.4.33103.184.nupkg.sha512",
+    "C:\\Users\\User\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.22621.755\\microsoft.windows.sdk.contracts.10.0.22621.755.nupkg.sha512",
+    "C:\\Users\\User\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\5.0.0\\system.runtime.compilerservices.unsafe.5.0.0.nupkg.sha512",
+    "C:\\Users\\User\\.nuget\\packages\\system.runtime.extensions\\4.3.1\\system.runtime.extensions.4.3.1.nupkg.sha512",
+    "C:\\Users\\User\\.nuget\\packages\\system.runtime.interopservices.windowsruntime\\4.3.0\\system.runtime.interopservices.windowsruntime.4.3.0.nupkg.sha512",
+    "C:\\Users\\User\\.nuget\\packages\\system.runtime.windowsruntime\\4.7.0\\system.runtime.windowsruntime.4.7.0.nupkg.sha512",
+    "C:\\Users\\User\\.nuget\\packages\\system.runtime.windowsruntime.ui.xaml\\4.7.0\\system.runtime.windowsruntime.ui.xaml.4.7.0.nupkg.sha512"
+  ],
+  "logs": []
+}

@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Colorful;
 using Console = Colorful.Console;
-
+ 
 namespace VRCOSCUtils
-{
-    public static class LogUtils
+{ 
+    public static class LogUtils 
     {
         public static void Error(string Message)
         {
