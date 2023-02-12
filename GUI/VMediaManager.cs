@@ -5,7 +5,7 @@ using static WindowsMediaController.MediaManager;
 
 namespace VRChatify
 {
-    public class VMediaManager
+    public class VMediaManager  
     {
 
         private static readonly MediaManager mediaManager = new MediaManager();

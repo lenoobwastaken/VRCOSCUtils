@@ -44,7 +44,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\..\Output\ConsoleUI\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -53,8 +53,8 @@
     <ApplicationIcon>VRCOSCUtils.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Colorful.Console, Version=1.2.15.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\Downloads\4.0\Colorful.Console.dll</HintPath>
+    <Reference Include="Colorful.Console">
+      <HintPath>..\..\..\GUI.1.0\Colorful.Console.dll</HintPath>
     </Reference>
     <Reference Include="CoreOSC, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
