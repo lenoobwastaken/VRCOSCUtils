@@ -8,7 +8,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>VRCOSCUtilsGUI</RootNamespace>
     <AssemblyName>VRCOSCUtilsGUI</AssemblyName>
-    <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
@@ -38,47 +38,60 @@
   <PropertyGroup>
     <StartupObject />
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="AutoUpdater.NET">
-      <HintPath>..\..\GUI.1.0\AutoUpdater.NET.dll</HintPath>
+      <HintPath>..\..\..\7.2\GUI\AutoUpdater.NET.dll</HintPath>
     </Reference>
     <Reference Include="Colorful.Console">
-      <HintPath>..\..\GUI.1.0\Colorful.Console.dll</HintPath>
+      <HintPath>..\..\..\7.2\GUI\Colorful.Console.dll</HintPath>
     </Reference>
     <Reference Include="CoreOSC">
-      <HintPath>..\..\GUI.1.0\CoreOSC.dll</HintPath>
-    </Reference>
-    <Reference Include="Dia2Lib">
-      <HintPath>..\..\GUI.1.0\Dia2Lib.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\..\..\7.2\GUI\CoreOSC.dll</HintPath>
     </Reference>
     <Reference Include="DiscordRPC">
-      <HintPath>..\..\GUI.1.0\DiscordRPC.dll</HintPath>
+      <HintPath>..\..\..\7.2\GUI\DiscordRPC.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=7.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.7.0.0\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Diagnostics.FastSerialization">
-      <HintPath>..\..\GUI.1.0\Microsoft.Diagnostics.FastSerialization.dll</HintPath>
+      <HintPath>..\..\..\7.2\GUI\Microsoft.Diagnostics.FastSerialization.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Diagnostics.Tracing.TraceEvent">
-      <HintPath>..\..\GUI.1.0\Microsoft.Diagnostics.Tracing.TraceEvent.dll</HintPath>
+      <HintPath>..\..\..\7.2\GUI\Microsoft.Diagnostics.Tracing.TraceEvent.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.WebView2.Core">
-      <HintPath>..\..\GUI.1.0\Microsoft.Web.WebView2.Core.dll</HintPath>
+      <HintPath>..\..\..\7.2\GUI\Microsoft.Web.WebView2.Core.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.WebView2.WinForms">
-      <HintPath>..\..\GUI.1.0\Microsoft.Web.WebView2.WinForms.dll</HintPath>
+      <HintPath>..\..\..\7.2\GUI\Microsoft.Web.WebView2.WinForms.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.WebView2.Wpf">
-      <HintPath>..\..\GUI.1.0\Microsoft.Web.WebView2.Wpf.dll</HintPath>
+      <HintPath>..\..\..\7.2\GUI\Microsoft.Web.WebView2.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\GUI.1.0\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="OSExtensions">
-      <HintPath>..\..\GUI.1.0\OSExtensions.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.CodeDom, Version=7.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -119,22 +132,18 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="TraceReloggerLib">
-      <HintPath>..\..\GUI.1.0\TraceReloggerLib.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="Windows">
-      <HintPath>..\..\..\..\..\Program Files (x86)\Windows Kits\10\UnionMetadata\Facade\Windows.WinMD</HintPath>
+    <Reference Include="windows">
+      <HintPath>C:\Program Files (x86)\Windows Kits\10\UnionMetadata\10.0.22000.0\Facade\windows.winmd</HintPath>
     </Reference>
     <Reference Include="Windows.Foundation.FoundationContract">
-      <HintPath>..\..\GUI.1.0\Windows.Foundation.FoundationContract.winmd</HintPath>
+      <HintPath>C:\Program Files (x86)\Windows Kits\10\References\10.0.18362.0\Windows.Foundation.FoundationContract\3.0.0.0\Windows.Foundation.FoundationContract.winmd</HintPath>
     </Reference>
     <Reference Include="Windows.Foundation.UniversalApiContract">
-      <HintPath>..\..\GUI.1.0\Windows.Foundation.UniversalApiContract.winmd</HintPath>
+      <HintPath>C:\Program Files (x86)\Windows Kits\10\References\10.0.19041.0\Windows.Foundation.UniversalApiContract\10.0.0.0\Windows.Foundation.UniversalApiContract.winmd</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="WindowsMediaController">
-      <HintPath>..\..\GUI.1.0\WindowsMediaController.dll</HintPath>
+      <HintPath>..\..\..\7.2\GUI\WindowsMediaController.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -159,6 +168,9 @@
     <EmbeddedResource Include="MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="VRCOSCUtils.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Runtime.WindowsRuntime.4.6.0\build\net461\System.Runtime.WindowsRuntime.targets" Condition="Exists('..\packages\System.Runtime.WindowsRuntime.4.6.0\build\net461\System.Runtime.WindowsRuntime.targets')" />

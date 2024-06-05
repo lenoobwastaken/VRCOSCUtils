@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using WindowsMediaController;
-using static WindowsMediaController.MediaManager;
 
 namespace VRChatify
 {
@@ -9,7 +8,7 @@ namespace VRChatify
     {
 
         private static readonly MediaManager mediaManager = new MediaManager();
-        public static MediaSession currentSession = null;
+        public static MediaManager.MediaSession currentSession = null;
       
 
         public void Init()
@@ -19,19 +18,19 @@ namespace VRChatify
             mediaManager.OnAnySessionClosed += MediaManager_OnAnySessionClosed;
         }
 
-        private void MediaManager_OnAnySessionOpened(MediaSession mediaSession)
+        private void MediaManager_OnAnySessionOpened(MediaManager.MediaSession mediaSession)
         {
             VRChatifyUtils.DebugLog($"Session Opened: {mediaSession.Id}");
             VRChatify.GetMainWindow().UpdateSessionList();
         }
 
-        private void MediaManager_OnAnySessionClosed(MediaSession mediaSession)
+        private void MediaManager_OnAnySessionClosed(MediaManager.MediaSession mediaSession)
         {
             VRChatifyUtils.DebugLog($"Session Closed: {mediaSession.Id}");
             VRChatify.GetMainWindow().UpdateSessionList();
         }
 
-        public MediaSession GetCurrentSession()
+        public MediaManager.MediaSession GetCurrentSession()
         {
             if (currentSession == null)
             {
@@ -113,7 +112,7 @@ namespace VRChatify
             return mediaManager;
         }
 
-        public void setCurrentSession(MediaSession session)
+        public void setCurrentSession(MediaManager.MediaSession session)
         {
             currentSession = session;
         }

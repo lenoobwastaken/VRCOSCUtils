@@ -5,11 +5,61 @@ using AutoUpdaterDotNET;
 using System.Text;
 using System.Runtime.Remoting.Messaging;
 using CoreOSC;
+using System.IO;
+using System.Runtime.InteropServices;
 
 namespace VRChatify
 {
     public partial class MainWindow : Form
     {
+        [DllImport("user32.dll")]
+        private static extern IntPtr GetForegroundWindow();
+
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint processId);
+
+        [DllImport("kernel32.dll")]
+        private static extern IntPtr OpenProcess(uint processAccess, bool bInheritHandle, uint processId);
+
+        [DllImport("psapi.dll")]
+        private static extern uint GetModuleBaseNameA(IntPtr hWnd, IntPtr hModule, StringBuilder lpBaseName, uint nSize);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool CloseHandle(IntPtr hObject);
+
+        private const uint PROCESS_QUERY_INFORMATION = 0x0400;
+        private const uint PROCESS_VM_READ = 0x0010;
+        private const uint MAX_PATH = 260;
+
+        public static string GetFocused()
+        {
+            // Get the handle of the foreground window
+            IntPtr foregroundWindow = GetForegroundWindow();
+
+            // Get the process ID of the foreground window
+            GetWindowThreadProcessId(foregroundWindow, out uint processId);
+
+            // Get a handle to the process
+            IntPtr processHandle = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, false, processId);
+
+            // Get the process name
+            StringBuilder processName = new StringBuilder((int)MAX_PATH);
+            if (GetModuleBaseNameA(processHandle, IntPtr.Zero, processName, MAX_PATH) == 0)
+            {
+                // If it's null, assume it's VRChat
+                CloseHandle(processHandle);
+                return "VRChat.exe";
+            }
+
+            // Print the process name
+
+            // Close the process handle
+            CloseHandle(processHandle);
+
+            return processName.ToString();
+        }
+
         private static System.Timers.Timer OSCTimer;
         private static string oscText = Config.GetConfig("oscText") ?? "{SONG} - {ARTIST} | CPU: {CPU}% | RAM: {RAM}% | GPU: {GPU}% | Time: {TIME} | {CLANTAG}";
         public MainWindow()
@@ -68,6 +118,7 @@ namespace VRChatify
                 // oscMsg = new StringBuilder();
                 (Spotify == true ? new Action(() => AppendToSB($"{VRChatify.mediaManager.GetSongArtist()} - {VRChatify.mediaManager.GetSongName()} || {VMediaManager.currentSession.ControlSession.GetTimelineProperties().Position.ToString(@"mm\:ss")}/{VMediaManager.currentSession.ControlSession.GetTimelineProperties().EndTime.ToString(@"mm\:ss")}")) : new Action(joemethod))();
                 (FPS == true ? new Action(() => AppendToSB($" || FPS: {VRChatify.currentfps}")) : new Action(joemethod))();
+                (Tabbed == true ? new Action(() => AppendToSB($" || Focused In: {GetFocused()}")) : new Action(joemethod))();
 
                 (Stats == true ? new Action(() => AppendToSB($" || CPU: {Math.Round(VRChatifyUtils.GetCpuUsage()).ToString()}% || RAM: {VRChatifyUtils.GetRamUsage()}% || GPU: {VRChatifyUtils.GetGPUUsage()}")) : new Action(joemethod))();
 
@@ -113,6 +164,7 @@ namespace VRChatify
             OSCTimer.Enabled = true;
         }
         static object sync = new object();
+        public static bool IsCustom = false;
         public static TimestampCollection vrcproc;
         private static void OnTimedEvent(object source, ElapsedEventArgs e)
         {
@@ -120,30 +172,47 @@ namespace VRChatify
             long dt = 2000;
             lock (sync)
             {
+                
                 t2 = VRChatify.watch.ElapsedMilliseconds;
                 t1 = t2 - dt;
 
                 int count = vrcproc.QueryCount(t1, t2);
-
-                (Spotify == true ? new Action(() => AppendToSB($"{VRChatify.mediaManager.GetSongArtist()} - {VRChatify.mediaManager.GetSongName()} || {VMediaManager.currentSession.ControlSession.GetTimelineProperties().Position.ToString(@"mm\:ss")}/{VMediaManager.currentSession.ControlSession.GetTimelineProperties().EndTime.ToString(@"mm\:ss")}")) : new Action(joemethod))();
-                (FPS == true ? new Action(() => AppendToSB($" || FPS: {Math.Round((double)count / dt * 1000.0)}")) : new Action(joemethod))();
-
-                (Stats == true ? new Action(() => AppendToSB($" || CPU: {Math.Round(VRChatifyUtils.GetCpuUsage()).ToString()}% || RAM: {VRChatifyUtils.GetRamUsage()}% || GPU: {VRChatifyUtils.GetGPUUsage()}")) : new Action(joemethod))();
-
-                (Clant == true ? new Action(() => AppendToSB($" || ClanTag: {VRChatify.ClanTagStrings[VRChatify.ClanTagIndex]}")) : new Action(joemethod))();
-                (LocalTime == true ? new Action(() => AppendToSB($" || My Time: {DateTime.Now.ToString("h:mm:ss tt")}")) : new Action(joemethod))();
-
-
-                VRChatify.SendChatMessage(oscMsg.ToString());
-                oscMsg.Clear();
-
-                if (VRChatify.ClanTagIndex >= VRChatify.ClanTagStrings.Count - 1)
+                if (IsCustom == false)
                 {
-                    VRChatify.ClanTagIndex = 0;
+
+                
+                    (Spotify == true ? new Action(() => AppendToSB($"{VRChatify.mediaManager.GetSongArtist()} - {VRChatify.mediaManager.GetSongName()} || {VMediaManager.currentSession.ControlSession.GetTimelineProperties().Position.ToString(@"mm\:ss")}/{VMediaManager.currentSession.ControlSession.GetTimelineProperties().EndTime.ToString(@"mm\:ss")}")) : new Action(joemethod))();
+                    (FPS == true ? new Action(() => AppendToSB($" || FPS: {Math.Round((double)count / dt * 1000.0)}")) : new Action(joemethod))();
+
+                    (Stats == true ? new Action(() => AppendToSB($" || CPU: {Math.Round(VRChatifyUtils.GetCpuUsage()).ToString()}% || RAM: {VRChatifyUtils.GetRamUsage()}% || GPU: {VRChatifyUtils.GetGPUUsage()}")) : new Action(joemethod))();
+
+                    (Clant == true ? new Action(() => AppendToSB($" || ClanTag: {VRChatify.ClanTagStrings[VRChatify.ClanTagIndex]}")) : new Action(joemethod))();
+                    (LocalTime == true ? new Action(() => AppendToSB($" || My Time: {DateTime.Now.ToString("h:mm:ss tt")}")) : new Action(joemethod))();
+
+
+                    VRChatify.SendChatMessage(oscMsg.ToString());
+                    oscMsg.Clear();
+
+                    if (VRChatify.ClanTagIndex >= VRChatify.ClanTagStrings.Count - 1)
+                    {
+                        VRChatify.ClanTagIndex = 0;
+                    }
+                    else
+                    {
+                        VRChatify.ClanTagIndex += 1;
+                    }
                 }
-                else
+                else if (IsCustom == true)
                 {
-                    VRChatify.ClanTagIndex += 1;
+                    VRChatify.Custom();
+                    if (VRChatify.ClanTagIndex >= VRChatify.ClanTagStrings.Count - 1)
+                    {
+                        VRChatify.ClanTagIndex = 0;
+                    }
+                    else
+                    {
+                        VRChatify.ClanTagIndex += 1;
+                    }
                 }
             }
 
@@ -177,7 +246,7 @@ namespace VRChatify
         public static bool Clant = false;
         public static bool FPS = false;
         public static bool LocalTime = false;
-
+        public static bool Tabbed = false;
         private void DebugLogging_CheckedChanged(object sender, EventArgs e)
         {
             VRChatify.debugging = DebugLogging.Checked;
@@ -230,6 +299,99 @@ namespace VRChatify
         {
             //CLANTAG TOGGLE
             Clant = checkBox4.Checked;
+
+        }
+
+        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox5_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void listView1_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void listView2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void checkBox6_CheckedChanged(object sender, EventArgs e)
+        {
+            IsCustom = checkBox6.Checked;
+        }
+        public static string test = "";
+        private void button1_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog1 = new OpenFileDialog
+            {
+                InitialDirectory = $"{Environment.CurrentDirectory}",
+                Title = "Browse Text Files",
+
+                CheckFileExists = true,
+                CheckPathExists = true,
+
+                DefaultExt = "txt",
+                Filter = "txt files (*.txt)|*.txt",
+                FilterIndex = 2,
+                RestoreDirectory = true,
+
+                ReadOnlyChecked = true,
+                ShowReadOnly = true
+            };
+
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                test = File.ReadAllText(openFileDialog1.FileName);
+                if (!string.IsNullOrEmpty(test))
+                {
+                    richTextBox1.Text = test;
+                }
+            }
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            var saveFileDialog1 = new SaveFileDialog
+            {
+                InitialDirectory = Environment.CurrentDirectory,
+                Filter = string.Format("{0}Text files (*.txt)|*.txt|All files (*.*)|*.*", "ARG0"),
+                RestoreDirectory = true,
+                ShowHelp = true,
+                CheckFileExists = false
+            };
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+                File.WriteAllText(saveFileDialog1.FileName, richTextBox1.Text);
+
+
+
+        }
+
+        private void listView1_SelectedIndexChanged_2(object sender, EventArgs e)
+        {
+
+        }
+
+        private void checkBox7_CheckedChanged(object sender, EventArgs e)
+        {
+            Tabbed = checkBox7.Checked;
 
         }
     }

@@ -29,21 +29,6 @@ namespace VRChatify
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem("{SONG}: Current Song");
-            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem("{ARTIST}: Songs Artist");
-            System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem("{SPOTIFY}: Shows spotifys current song/artist");
-            System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem("{CPU}: CPU Usage");
-            System.Windows.Forms.ListViewItem listViewItem5 = new System.Windows.Forms.ListViewItem("{GPU}: GPU Usage");
-            System.Windows.Forms.ListViewItem listViewItem6 = new System.Windows.Forms.ListViewItem("{RAM}: Ram Usage");
-            System.Windows.Forms.ListViewItem listViewItem7 = new System.Windows.Forms.ListViewItem("{RAM-AVAILABLE}: Ram Available");
-            System.Windows.Forms.ListViewItem listViewItem8 = new System.Windows.Forms.ListViewItem("{RAM-CAPACITY}: Total Ram");
-            System.Windows.Forms.ListViewItem listViewItem9 = new System.Windows.Forms.ListViewItem("{RAM-USED}: Ram being used");
-            System.Windows.Forms.ListViewItem listViewItem10 = new System.Windows.Forms.ListViewItem("{TIME}: current time (12h)");
-            System.Windows.Forms.ListViewItem listViewItem11 = new System.Windows.Forms.ListViewItem("{MTIME}: current time (24h)");
-            System.Windows.Forms.ListViewItem listViewItem12 = new System.Windows.Forms.ListViewItem("{WINDOW}: Currently focused window");
-            System.Windows.Forms.ListViewItem listViewItem13 = new System.Windows.Forms.ListViewItem("{DURATION}: song total duration");
-            System.Windows.Forms.ListViewItem listViewItem14 = new System.Windows.Forms.ListViewItem("{POSITION}: song current positon");
-            System.Windows.Forms.ListViewItem listViewItem15 = new System.Windows.Forms.ListViewItem("{CLANTAG}: clantag idk");
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.presenceToggle = new System.Windows.Forms.CheckBox();
             this.OSCToggle = new System.Windows.Forms.CheckBox();
@@ -66,14 +51,23 @@ namespace VRChatify
             this.ClanTagLabel = new System.Windows.Forms.Label();
             this.ClanTag = new System.Windows.Forms.TextBox();
             this.DebugLogging = new System.Windows.Forms.CheckBox();
-            this.Placeholders = new System.Windows.Forms.GroupBox();
-            this.listView1 = new System.Windows.Forms.ListView();
+            this.PlaceHolder = new System.Windows.Forms.GroupBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.Console = new System.Windows.Forms.GroupBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.checkBox6 = new System.Windows.Forms.CheckBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.richTextBox2 = new System.Windows.Forms.RichTextBox();
+            this.checkBox7 = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
-            this.Placeholders.SuspendLayout();
+            this.PlaceHolder.SuspendLayout();
+            this.groupBox5.SuspendLayout();
+            this.Console.SuspendLayout();
             this.SuspendLayout();
             // 
             // presenceToggle
@@ -81,10 +75,9 @@ namespace VRChatify
             this.presenceToggle.AutoSize = true;
             this.presenceToggle.BackColor = System.Drawing.Color.Transparent;
             this.presenceToggle.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.presenceToggle.Location = new System.Drawing.Point(12, 23);
-            this.presenceToggle.Margin = new System.Windows.Forms.Padding(4);
+            this.presenceToggle.Location = new System.Drawing.Point(9, 19);
             this.presenceToggle.Name = "presenceToggle";
-            this.presenceToggle.Size = new System.Drawing.Size(72, 20);
+            this.presenceToggle.Size = new System.Drawing.Size(59, 17);
             this.presenceToggle.TabIndex = 0;
             this.presenceToggle.Text = "Enable";
             this.presenceToggle.UseVisualStyleBackColor = false;
@@ -94,10 +87,9 @@ namespace VRChatify
             // 
             this.OSCToggle.AutoSize = true;
             this.OSCToggle.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.OSCToggle.Location = new System.Drawing.Point(12, 23);
-            this.OSCToggle.Margin = new System.Windows.Forms.Padding(4);
+            this.OSCToggle.Location = new System.Drawing.Point(9, 19);
             this.OSCToggle.Name = "OSCToggle";
-            this.OSCToggle.Size = new System.Drawing.Size(152, 20);
+            this.OSCToggle.Size = new System.Drawing.Size(122, 17);
             this.OSCToggle.TabIndex = 2;
             this.OSCToggle.Text = "OSC Message Send";
             this.OSCToggle.UseVisualStyleBackColor = true;
@@ -107,15 +99,15 @@ namespace VRChatify
             // 
             this.oscMessageLabel.AutoSize = true;
             this.oscMessageLabel.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.oscMessageLabel.Location = new System.Drawing.Point(9, 48);
-            this.oscMessageLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.oscMessageLabel.Location = new System.Drawing.Point(7, 39);
             this.oscMessageLabel.Name = "oscMessageLabel";
-            this.oscMessageLabel.Size = new System.Drawing.Size(89, 16);
+            this.oscMessageLabel.Size = new System.Drawing.Size(70, 13);
             this.oscMessageLabel.TabIndex = 3;
             this.oscMessageLabel.Text = "OSC Toggles";
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.checkBox7);
             this.groupBox1.Controls.Add(this.checkBox5);
             this.groupBox1.Controls.Add(this.checkBox4);
             this.groupBox1.Controls.Add(this.checkBox3);
@@ -124,11 +116,9 @@ namespace VRChatify
             this.groupBox1.Controls.Add(this.oscMessageLabel);
             this.groupBox1.Controls.Add(this.OSCToggle);
             this.groupBox1.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.groupBox1.Location = new System.Drawing.Point(16, 15);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(4);
+            this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBox1.Size = new System.Drawing.Size(365, 150);
+            this.groupBox1.Size = new System.Drawing.Size(274, 122);
             this.groupBox1.TabIndex = 5;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "OSC Settings";
@@ -137,10 +127,9 @@ namespace VRChatify
             // 
             this.checkBox5.AutoSize = true;
             this.checkBox5.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.checkBox5.Location = new System.Drawing.Point(89, 96);
-            this.checkBox5.Margin = new System.Windows.Forms.Padding(4);
+            this.checkBox5.Location = new System.Drawing.Point(81, 78);
             this.checkBox5.Name = "checkBox5";
-            this.checkBox5.Size = new System.Drawing.Size(96, 20);
+            this.checkBox5.Size = new System.Drawing.Size(78, 17);
             this.checkBox5.TabIndex = 8;
             this.checkBox5.Text = "Local Time";
             this.checkBox5.UseVisualStyleBackColor = true;
@@ -150,10 +139,9 @@ namespace VRChatify
             // 
             this.checkBox4.AutoSize = true;
             this.checkBox4.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.checkBox4.Location = new System.Drawing.Point(12, 122);
-            this.checkBox4.Margin = new System.Windows.Forms.Padding(4);
+            this.checkBox4.Location = new System.Drawing.Point(9, 99);
             this.checkBox4.Name = "checkBox4";
-            this.checkBox4.Size = new System.Drawing.Size(75, 20);
+            this.checkBox4.Size = new System.Drawing.Size(62, 17);
             this.checkBox4.TabIndex = 7;
             this.checkBox4.Text = "Clantag";
             this.checkBox4.UseVisualStyleBackColor = true;
@@ -163,10 +151,9 @@ namespace VRChatify
             // 
             this.checkBox3.AutoSize = true;
             this.checkBox3.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.checkBox3.Location = new System.Drawing.Point(89, 68);
-            this.checkBox3.Margin = new System.Windows.Forms.Padding(4);
+            this.checkBox3.Location = new System.Drawing.Point(81, 55);
             this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(55, 20);
+            this.checkBox3.Size = new System.Drawing.Size(46, 17);
             this.checkBox3.TabIndex = 6;
             this.checkBox3.Text = "FPS";
             this.checkBox3.UseVisualStyleBackColor = true;
@@ -176,10 +163,9 @@ namespace VRChatify
             // 
             this.checkBox2.AutoSize = true;
             this.checkBox2.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.checkBox2.Location = new System.Drawing.Point(11, 94);
-            this.checkBox2.Margin = new System.Windows.Forms.Padding(4);
+            this.checkBox2.Location = new System.Drawing.Point(8, 76);
             this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(80, 20);
+            this.checkBox2.Size = new System.Drawing.Size(67, 17);
             this.checkBox2.TabIndex = 5;
             this.checkBox2.Text = "PC Stats";
             this.checkBox2.UseVisualStyleBackColor = true;
@@ -189,10 +175,9 @@ namespace VRChatify
             // 
             this.checkBox1.AutoSize = true;
             this.checkBox1.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.checkBox1.Location = new System.Drawing.Point(12, 68);
-            this.checkBox1.Margin = new System.Windows.Forms.Padding(4);
+            this.checkBox1.Location = new System.Drawing.Point(9, 55);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(70, 20);
+            this.checkBox1.Size = new System.Drawing.Size(58, 17);
             this.checkBox1.TabIndex = 4;
             this.checkBox1.Text = "Spotify";
             this.checkBox1.UseVisualStyleBackColor = true;
@@ -205,11 +190,9 @@ namespace VRChatify
             this.groupBox2.Controls.Add(this.presenceDetails);
             this.groupBox2.Controls.Add(this.presenceToggle);
             this.groupBox2.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.groupBox2.Location = new System.Drawing.Point(16, 164);
-            this.groupBox2.Margin = new System.Windows.Forms.Padding(4);
+            this.groupBox2.Location = new System.Drawing.Point(12, 133);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBox2.Size = new System.Drawing.Size(365, 142);
+            this.groupBox2.Size = new System.Drawing.Size(274, 115);
             this.groupBox2.TabIndex = 6;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Discord Presence";
@@ -217,10 +200,9 @@ namespace VRChatify
             // PresenceUpdateButton
             // 
             this.PresenceUpdateButton.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.PresenceUpdateButton.Location = new System.Drawing.Point(8, 100);
-            this.PresenceUpdateButton.Margin = new System.Windows.Forms.Padding(4);
+            this.PresenceUpdateButton.Location = new System.Drawing.Point(6, 81);
             this.PresenceUpdateButton.Name = "PresenceUpdateButton";
-            this.PresenceUpdateButton.Size = new System.Drawing.Size(129, 28);
+            this.PresenceUpdateButton.Size = new System.Drawing.Size(97, 23);
             this.PresenceUpdateButton.TabIndex = 3;
             this.PresenceUpdateButton.Text = "Update";
             this.PresenceUpdateButton.UseVisualStyleBackColor = true;
@@ -229,19 +211,17 @@ namespace VRChatify
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(8, 48);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Location = new System.Drawing.Point(6, 39);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(94, 16);
+            this.label1.Size = new System.Drawing.Size(76, 13);
             this.label1.TabIndex = 2;
             this.label1.Text = "Presence Text";
             // 
             // presenceDetails
             // 
-            this.presenceDetails.Location = new System.Drawing.Point(8, 68);
-            this.presenceDetails.Margin = new System.Windows.Forms.Padding(4);
+            this.presenceDetails.Location = new System.Drawing.Point(6, 55);
             this.presenceDetails.Name = "presenceDetails";
-            this.presenceDetails.Size = new System.Drawing.Size(132, 22);
+            this.presenceDetails.Size = new System.Drawing.Size(100, 20);
             this.presenceDetails.TabIndex = 1;
             this.presenceDetails.Text = "Using VRchatify";
             // 
@@ -250,32 +230,27 @@ namespace VRChatify
             this.groupBox3.Controls.Add(this.SessionHolder);
             this.groupBox3.Controls.Add(this.ForceUpdateSessions);
             this.groupBox3.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.groupBox3.Location = new System.Drawing.Point(389, 15);
-            this.groupBox3.Margin = new System.Windows.Forms.Padding(4);
+            this.groupBox3.Location = new System.Drawing.Point(292, 12);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBox3.Size = new System.Drawing.Size(267, 142);
+            this.groupBox3.Size = new System.Drawing.Size(200, 115);
             this.groupBox3.TabIndex = 7;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Session List";
             // 
             // SessionHolder
             // 
-            this.SessionHolder.Location = new System.Drawing.Point(8, 23);
-            this.SessionHolder.Margin = new System.Windows.Forms.Padding(4);
+            this.SessionHolder.Location = new System.Drawing.Point(6, 19);
             this.SessionHolder.Name = "SessionHolder";
-            this.SessionHolder.Padding = new System.Windows.Forms.Padding(4);
-            this.SessionHolder.Size = new System.Drawing.Size(249, 75);
+            this.SessionHolder.Size = new System.Drawing.Size(187, 61);
             this.SessionHolder.TabIndex = 2;
             this.SessionHolder.TabStop = false;
             // 
             // ForceUpdateSessions
             // 
             this.ForceUpdateSessions.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.ForceUpdateSessions.Location = new System.Drawing.Point(8, 106);
-            this.ForceUpdateSessions.Margin = new System.Windows.Forms.Padding(4);
+            this.ForceUpdateSessions.Location = new System.Drawing.Point(6, 86);
             this.ForceUpdateSessions.Name = "ForceUpdateSessions";
-            this.ForceUpdateSessions.Size = new System.Drawing.Size(249, 28);
+            this.ForceUpdateSessions.Size = new System.Drawing.Size(187, 23);
             this.ForceUpdateSessions.TabIndex = 1;
             this.ForceUpdateSessions.Text = "Force Update Sessions";
             this.ForceUpdateSessions.UseVisualStyleBackColor = true;
@@ -295,11 +270,9 @@ namespace VRChatify
             this.groupBox4.Controls.Add(this.ClanTag);
             this.groupBox4.Controls.Add(this.DebugLogging);
             this.groupBox4.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.groupBox4.Location = new System.Drawing.Point(16, 313);
-            this.groupBox4.Margin = new System.Windows.Forms.Padding(4);
+            this.groupBox4.Location = new System.Drawing.Point(12, 254);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBox4.Size = new System.Drawing.Size(365, 123);
+            this.groupBox4.Size = new System.Drawing.Size(274, 100);
             this.groupBox4.TabIndex = 8;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Settings";
@@ -307,19 +280,17 @@ namespace VRChatify
             // ClanTagLabel
             // 
             this.ClanTagLabel.AutoSize = true;
-            this.ClanTagLabel.Location = new System.Drawing.Point(12, 49);
-            this.ClanTagLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.ClanTagLabel.Location = new System.Drawing.Point(9, 40);
             this.ClanTagLabel.Name = "ClanTagLabel";
-            this.ClanTagLabel.Size = new System.Drawing.Size(62, 16);
+            this.ClanTagLabel.Size = new System.Drawing.Size(50, 13);
             this.ClanTagLabel.TabIndex = 5;
             this.ClanTagLabel.Text = "Clan Tag";
             // 
             // ClanTag
             // 
-            this.ClanTag.Location = new System.Drawing.Point(12, 69);
-            this.ClanTag.Margin = new System.Windows.Forms.Padding(4);
+            this.ClanTag.Location = new System.Drawing.Point(9, 56);
             this.ClanTag.Name = "ClanTag";
-            this.ClanTag.Size = new System.Drawing.Size(161, 22);
+            this.ClanTag.Size = new System.Drawing.Size(122, 20);
             this.ClanTag.TabIndex = 4;
             this.ClanTag.Text = "VRChatify";
             this.ClanTag.TextChanged += new System.EventHandler(this.ClanTag_TextChanged);
@@ -327,85 +298,139 @@ namespace VRChatify
             // DebugLogging
             // 
             this.DebugLogging.AutoSize = true;
-            this.DebugLogging.Location = new System.Drawing.Point(12, 25);
-            this.DebugLogging.Margin = new System.Windows.Forms.Padding(4);
+            this.DebugLogging.Location = new System.Drawing.Point(9, 20);
             this.DebugLogging.Name = "DebugLogging";
-            this.DebugLogging.Size = new System.Drawing.Size(122, 20);
+            this.DebugLogging.Size = new System.Drawing.Size(99, 17);
             this.DebugLogging.TabIndex = 0;
             this.DebugLogging.Text = "Debug Logging";
             this.DebugLogging.UseVisualStyleBackColor = true;
             this.DebugLogging.CheckedChanged += new System.EventHandler(this.DebugLogging_CheckedChanged);
             // 
-            // Placeholders
+            // PlaceHolder
             // 
-            this.Placeholders.Controls.Add(this.listView1);
-            this.Placeholders.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.Placeholders.Location = new System.Drawing.Point(665, 16);
-            this.Placeholders.Margin = new System.Windows.Forms.Padding(4);
-            this.Placeholders.Name = "Placeholders";
-            this.Placeholders.Padding = new System.Windows.Forms.Padding(4);
-            this.Placeholders.Size = new System.Drawing.Size(359, 420);
-            this.Placeholders.TabIndex = 9;
-            this.Placeholders.TabStop = false;
-            this.Placeholders.Text = "Placeholders";
-            // 
-            // listView1
-            // 
-            this.listView1.BackColor = System.Drawing.SystemColors.WindowText;
-            this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listView1.ForeColor = System.Drawing.SystemColors.Window;
-            this.listView1.HideSelection = false;
-            this.listView1.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem1,
-            listViewItem2,
-            listViewItem3,
-            listViewItem4,
-            listViewItem5,
-            listViewItem6,
-            listViewItem7,
-            listViewItem8,
-            listViewItem9,
-            listViewItem10,
-            listViewItem11,
-            listViewItem12,
-            listViewItem13,
-            listViewItem14,
-            listViewItem15});
-            this.listView1.Location = new System.Drawing.Point(4, 19);
-            this.listView1.Margin = new System.Windows.Forms.Padding(4);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(351, 397);
-            this.listView1.TabIndex = 0;
-            this.listView1.TileSize = new System.Drawing.Size(200, 30);
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.Tile;
+            this.PlaceHolder.Controls.Add(this.richTextBox2);
+            this.PlaceHolder.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.PlaceHolder.Location = new System.Drawing.Point(499, 13);
+            this.PlaceHolder.Name = "PlaceHolder";
+            this.PlaceHolder.Size = new System.Drawing.Size(269, 341);
+            this.PlaceHolder.TabIndex = 9;
+            this.PlaceHolder.TabStop = false;
+            this.PlaceHolder.Text = "Custom Variables";
             // 
             // groupBox5
             // 
+            this.groupBox5.Controls.Add(this.richTextBox1);
             this.groupBox5.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.groupBox5.Location = new System.Drawing.Point(389, 165);
-            this.groupBox5.Margin = new System.Windows.Forms.Padding(4);
+            this.groupBox5.Location = new System.Drawing.Point(292, 134);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBox5.Size = new System.Drawing.Size(267, 271);
+            this.groupBox5.Size = new System.Drawing.Size(200, 173);
             this.groupBox5.TabIndex = 10;
             this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Messages";
+            this.groupBox5.Text = "Custom Text";
+            // 
+            // richTextBox1
+            // 
+            this.richTextBox1.BackColor = System.Drawing.SystemColors.InactiveCaptionText;
+            this.richTextBox1.ForeColor = System.Drawing.SystemColors.Window;
+            this.richTextBox1.Location = new System.Drawing.Point(6, 16);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.Size = new System.Drawing.Size(188, 151);
+            this.richTextBox1.TabIndex = 0;
+            this.richTextBox1.Text = "";
+            this.richTextBox1.TextChanged += new System.EventHandler(this.richTextBox1_TextChanged);
+            // 
+            // Console
+            // 
+            this.Console.Controls.Add(this.label2);
+            this.Console.ForeColor = System.Drawing.Color.White;
+            this.Console.Location = new System.Drawing.Point(12, 360);
+            this.Console.Name = "Console";
+            this.Console.Size = new System.Drawing.Size(756, 174);
+            this.Console.TabIndex = 11;
+            this.Console.TabStop = false;
+            this.Console.Text = "Console";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(7, 20);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(0, 13);
+            this.label2.TabIndex = 0;
+            // 
+            // checkBox6
+            // 
+            this.checkBox6.AutoSize = true;
+            this.checkBox6.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.checkBox6.Location = new System.Drawing.Point(356, 312);
+            this.checkBox6.Name = "checkBox6";
+            this.checkBox6.Size = new System.Drawing.Size(59, 17);
+            this.checkBox6.TabIndex = 12;
+            this.checkBox6.Text = "Enable";
+            this.checkBox6.UseVisualStyleBackColor = true;
+            this.checkBox6.CheckedChanged += new System.EventHandler(this.checkBox6_CheckedChanged);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(298, 331);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(78, 23);
+            this.button1.TabIndex = 13;
+            this.button1.Text = "Load Config";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(397, 331);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(88, 23);
+            this.button2.TabIndex = 14;
+            this.button2.Text = "Save Config";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // richTextBox2
+            // 
+            this.richTextBox2.BackColor = System.Drawing.SystemColors.ControlText;
+            this.richTextBox2.ForeColor = System.Drawing.SystemColors.Window;
+            this.richTextBox2.Location = new System.Drawing.Point(7, 20);
+            this.richTextBox2.Name = "richTextBox2";
+            this.richTextBox2.ReadOnly = true;
+            this.richTextBox2.Size = new System.Drawing.Size(262, 321);
+            this.richTextBox2.TabIndex = 0;
+            this.richTextBox2.Text = "{SPOTIFY}\n\n{TIMESTAMP}\n\n{FPS}\n\n{TIME}\n\n{CLANTAG}\n\n{CPU}\n\n{GPU}\n\n{RAM}\n\n{TABBED}\n\n" +
+    "\n\n";
+            // 
+            // checkBox7
+            // 
+            this.checkBox7.AutoSize = true;
+            this.checkBox7.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.checkBox7.Location = new System.Drawing.Point(81, 101);
+            this.checkBox7.Name = "checkBox7";
+            this.checkBox7.Size = new System.Drawing.Size(63, 17);
+            this.checkBox7.TabIndex = 9;
+            this.checkBox7.Text = "Tabbed";
+            this.checkBox7.UseVisualStyleBackColor = true;
+            this.checkBox7.CheckedChanged += new System.EventHandler(this.checkBox7_CheckedChanged);
             // 
             // MainWindow
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(1040, 676);
+            this.ClientSize = new System.Drawing.Size(780, 549);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.checkBox6);
+            this.Controls.Add(this.Console);
             this.Controls.Add(this.groupBox5);
-            this.Controls.Add(this.Placeholders);
+            this.Controls.Add(this.PlaceHolder);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "MainWindow";
             this.Text = "VRChatify";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -416,8 +441,12 @@ namespace VRChatify
             this.groupBox3.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
-            this.Placeholders.ResumeLayout(false);
+            this.PlaceHolder.ResumeLayout(false);
+            this.groupBox5.ResumeLayout(false);
+            this.Console.ResumeLayout(false);
+            this.Console.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -440,13 +469,20 @@ namespace VRChatify
         private System.Windows.Forms.CheckBox DebugLogging;
         private System.Windows.Forms.Label ClanTagLabel;
         private System.Windows.Forms.TextBox ClanTag;
-        private System.Windows.Forms.GroupBox Placeholders;
-        private System.Windows.Forms.ListView listView1;
-        private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.CheckBox checkBox5;
         private System.Windows.Forms.CheckBox checkBox4;
         private System.Windows.Forms.CheckBox checkBox3;
         private System.Windows.Forms.CheckBox checkBox2;
         private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.GroupBox PlaceHolder;
+        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.GroupBox Console;
+        public System.Windows.Forms.Label label2;
+        public System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.CheckBox checkBox6;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.RichTextBox richTextBox2;
+        private System.Windows.Forms.CheckBox checkBox7;
     }
 }
