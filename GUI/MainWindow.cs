@@ -7,6 +7,11 @@ using System.Runtime.Remoting.Messaging;
 using CoreOSC;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Drawing;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace VRChatify
 {
@@ -27,11 +32,28 @@ namespace VRChatify
         [DllImport("kernel32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool CloseHandle(IntPtr hObject);
+        [DllImport("user32.dll")]
+        static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
 
         private const uint PROCESS_QUERY_INFORMATION = 0x0400;
         private const uint PROCESS_VM_READ = 0x0010;
         private const uint MAX_PATH = 260;
-
+        public static string GetActiveWindow()
+        {
+            const int nChars = 256;
+            IntPtr handle;
+            StringBuilder Buff = new StringBuilder(nChars);
+            handle = GetForegroundWindow();
+            if (GetWindowText(handle, Buff, nChars) > 0)
+            {
+                return Buff.ToString();
+            }
+            else if (GetWindowText(handle, Buff, nChars) == 0)
+            {
+                return "VRChat";
+            }
+            return "";
+        }
         public static string GetFocused()
         {
             // Get the handle of the foreground window
@@ -49,7 +71,7 @@ namespace VRChatify
             {
                 // If it's null, assume it's VRChat
                 CloseHandle(processHandle);
-                return "VRChat.exe";
+                return "VRChat";
             }
 
             // Print the process name
@@ -64,19 +86,16 @@ namespace VRChatify
         private static string oscText = Config.GetConfig("oscText") ?? "{SONG} - {ARTIST} | CPU: {CPU}% | RAM: {RAM}% | GPU: {GPU}% | Time: {TIME} | {CLANTAG}";
         public MainWindow()
         {
-            //AutoUpdater.InstalledVersion = new Version(VRChatify.Version);
-            //AutoUpdater.Start("https://raw.githubusercontent.com/Oli-idk/VRChatify/main/AutoUpdateInfo.xml");
             InitializeComponent();
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            //set window title to app version
             Text = $"VRCOSCUtils";
-            //   oscMessage.Text = oscText;
             ClanTag.Text = Config.GetConfig("clantag") ?? "VRChatify";
             VRChatify.ClanTagStrings = VRChatifyUtils.ClanTagText(ClanTag.Text);
             UpdateSessionList();
+
         }
 
         private void PresenceToggle_CheckedChanged(object sender, EventArgs e)
@@ -105,7 +124,7 @@ namespace VRChatify
         }
         private void OSCToggle_CheckedChanged(object sender, EventArgs e)
         {
-            //if checkbox checked start 5 second repeating timer else stop it
+            //if checkbox checked start 5 second repeating timer else stop it 
             if (OSCToggle.Checked)
             {
                 foreach (var x in VRChatify.frames.Values)
@@ -116,15 +135,18 @@ namespace VRChatify
                     }
                 }
                 // oscMsg = new StringBuilder();
+                
                 (Spotify == true ? new Action(() => AppendToSB($"{VRChatify.mediaManager.GetSongArtist()} - {VRChatify.mediaManager.GetSongName()} || {VMediaManager.currentSession.ControlSession.GetTimelineProperties().Position.ToString(@"mm\:ss")}/{VMediaManager.currentSession.ControlSession.GetTimelineProperties().EndTime.ToString(@"mm\:ss")}")) : new Action(joemethod))();
                 (FPS == true ? new Action(() => AppendToSB($" || FPS: {VRChatify.currentfps}")) : new Action(joemethod))();
                 (Tabbed == true ? new Action(() => AppendToSB($" || Focused In: {GetFocused()}")) : new Action(joemethod))();
+               // (Tabbed == true ? new Action(() => AppendToSB($" || Focused In: {GetFocused()}")) : new Action(joemethod))();
 
                 (Stats == true ? new Action(() => AppendToSB($" || CPU: {Math.Round(VRChatifyUtils.GetCpuUsage()).ToString()}% || RAM: {VRChatifyUtils.GetRamUsage()}% || GPU: {VRChatifyUtils.GetGPUUsage()}")) : new Action(joemethod))();
+                (Animated == true ? new Action(() => AppendToSB($" || {currentanimstr}")) : new Action(joemethod))();
 
-                (Clant == true ? new Action(() => AppendToSB($" || ClanTag: {VRChatify.ClanTagStrings[VRChatify.ClanTagIndex]}")) : new Action(joemethod))();
+                (Clant == true ? new Action(() => AppendToSB($" || {VRChatify.ClanTagStrings[VRChatify.ClanTagIndex]}")) : new Action(joemethod))();
                 (LocalTime == true ? new Action(() => AppendToSB($" || My Time: {DateTime.Now.ToString("h:mm:ss tt")}")) : new Action(joemethod))();
-
+                (InvisibleBox == true ? new Action(() => AppendToSB($"\u0003\u001f")) : new Action(joemethod))();
                 // .Replace("{SONG}", VRChatify.mediaManager.GetSongName())
                 // .Replace("{ARTIST}", VRChatify.mediaManager.GetSongArtist())
                 // .Replace("{SPOTIFY}", VRChatifyUtils.GetSpotifySong())
@@ -143,16 +165,21 @@ namespace VRChatify
 
                 VRChatify.SendChatMessage(oscMsg.ToString());
                 oscMsg.Clear();
-
+                
                 SetTimer();
+                Task.Run(UpdateFrames);
             }
             else
             {
                 OSCTimer.Stop();
                 OSCTimer.Dispose();
                 oscMsg.Clear();
+                
             }
         }
+        public static string currentlyrics = "";
+
+       // public static Thread strthread;
 
         private static void SetTimer()
         {
@@ -165,6 +192,8 @@ namespace VRChatify
         }
         static object sync = new object();
         public static bool IsCustom = false;
+
+        public static bool Lyrics = false;
         public static TimestampCollection vrcproc;
         private static void OnTimedEvent(object source, ElapsedEventArgs e)
         {
@@ -180,13 +209,15 @@ namespace VRChatify
                 if (IsCustom == false)
                 {
 
-                
+
                     (Spotify == true ? new Action(() => AppendToSB($"{VRChatify.mediaManager.GetSongArtist()} - {VRChatify.mediaManager.GetSongName()} || {VMediaManager.currentSession.ControlSession.GetTimelineProperties().Position.ToString(@"mm\:ss")}/{VMediaManager.currentSession.ControlSession.GetTimelineProperties().EndTime.ToString(@"mm\:ss")}")) : new Action(joemethod))();
+                    (Lyrics == true ? new Action(() => AppendToSB($" || {VRChatify.mediaManager.GetLyrics().Result}")) : new Action(joemethod))();
+
                     (FPS == true ? new Action(() => AppendToSB($" || FPS: {Math.Round((double)count / dt * 1000.0)}")) : new Action(joemethod))();
-
                     (Stats == true ? new Action(() => AppendToSB($" || CPU: {Math.Round(VRChatifyUtils.GetCpuUsage()).ToString()}% || RAM: {VRChatifyUtils.GetRamUsage()}% || GPU: {VRChatifyUtils.GetGPUUsage()}")) : new Action(joemethod))();
+                    (Animated == true ? new Action(() => AppendToSB($" || {currentanimstr}")) : new Action(joemethod))();
 
-                    (Clant == true ? new Action(() => AppendToSB($" || ClanTag: {VRChatify.ClanTagStrings[VRChatify.ClanTagIndex]}")) : new Action(joemethod))();
+                    (Clant == true ? new Action(() => AppendToSB($" || {VRChatify.ClanTagStrings[VRChatify.ClanTagIndex]}")) : new Action(joemethod))();
                     (LocalTime == true ? new Action(() => AppendToSB($" || My Time: {DateTime.Now.ToString("h:mm:ss tt")}")) : new Action(joemethod))();
 
 
@@ -205,6 +236,16 @@ namespace VRChatify
                 else if (IsCustom == true)
                 {
                     VRChatify.Custom();
+                    if (VRChatify.AnimIndex >= VRChatify.AnimStr.Count - 1)
+                    {
+                        VRChatify.AnimIndex = 0;
+
+                    }
+                    else
+                    {
+                        VRChatify.AnimIndex = 0;
+                    }
+                    currentanimstr = VRChatify.AnimStr[VRChatify.AnimIndex];
                     if (VRChatify.ClanTagIndex >= VRChatify.ClanTagStrings.Count - 1)
                     {
                         VRChatify.ClanTagIndex = 0;
@@ -247,6 +288,10 @@ namespace VRChatify
         public static bool FPS = false;
         public static bool LocalTime = false;
         public static bool Tabbed = false;
+        public static bool InvisibleBox = false;
+        public static bool Animated = false;
+        //\u0003\u001f
+
         private void DebugLogging_CheckedChanged(object sender, EventArgs e)
         {
             VRChatify.debugging = DebugLogging.Checked;
@@ -393,6 +438,301 @@ namespace VRChatify
         {
             Tabbed = checkBox7.Checked;
 
+        }
+      
+
+        private void checkBox8_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void richTextBox2_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Console_Enter(object sender, EventArgs e)
+        {
+
+        }
+        static int lastnumval = 0;
+      
+     
+
+        private void groupBox6_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+        }
+        static List<string> list = new List<string>();
+        private void button3_Click(object sender, EventArgs e)
+        {
+            var saveFileDialog1 = new SaveFileDialog
+            {
+                InitialDirectory = Environment.CurrentDirectory,
+                Filter = string.Format("{0}Text files (*.txt)|*.txt|All files (*.*)|*.*", "ARG0"),
+                RestoreDirectory = true,
+                ShowHelp = true,
+                CheckFileExists = false
+            };
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+                File.WriteAllText(saveFileDialog1.FileName, fastColoredTextBox3.Text);
+
+        }
+
+        private void groupBox4_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ClanTagLabel_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox5_Enter_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tabPage3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void checkBox9_CheckedChanged(object sender, EventArgs e)
+        {
+            Animated = checkBox9.Checked;
+
+        }
+
+        private void Sessions_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void PlaceHolder_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox2_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void presenceDetails_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox3_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void SessionHolder_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void oscMessageLabel_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tabPage2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog1 = new OpenFileDialog
+            {
+                InitialDirectory = $"{Environment.CurrentDirectory}",
+                Title = "Browse Text Files",
+
+                CheckFileExists = true,
+                CheckPathExists = true,
+
+                DefaultExt = "txt",
+                Filter = "txt files (*.txt)|*.txt",
+                FilterIndex = 2,
+                RestoreDirectory = true,
+
+                ReadOnlyChecked = true,
+                ShowReadOnly = true
+            };
+
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                test = File.ReadAllText(openFileDialog1.FileName);
+                if (!string.IsNullOrEmpty(test))
+                {
+                    fastColoredTextBox3.Text = test;
+                }
+            }
+        }
+
+        private void vScrollBar1_Scroll(object sender, ScrollEventArgs e)
+        {
+
+        }
+        private Task UpdateFrames()
+        {
+            while (true)
+            {
+                if (OSCToggle.Enabled == true && Animated == true)
+                {
+                    for (int i = 0; i < VRChatify.AnimStr.Count; i++)
+                    {
+                        currentanimstr = VRChatify.AnimStr[i];
+                        Task.Delay(500);
+                    }
+
+                }
+            }
+            return Task.CompletedTask;
+        }
+       
+        private void fastColoredTextBox1_Load(object sender, EventArgs e)
+        {
+
+        }
+        public static string currentanimstr = "";
+
+        private void fastColoredTextBox1_TextChanged(object sender, EventArgs e)
+        {
+            
+            if (fastColoredTextBox3.Text != null)
+            {
+                foreach (var s in fastColoredTextBox3.Text.SplitToLines())
+                {
+                    VRChatify.AnimStr.Add(s);
+                }
+                
+
+            }
+
+        }
+
+        private void richTextBox1_TextChanged_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox5_DragDrop(object sender, DragEventArgs e)
+        {
+
+        }
+
+        private void checkBox10_CheckedChanged(object sender, EventArgs e)
+        {
+            Animated = true;
+        }
+
+        private void fastColoredTextBox2_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void S(object sender, FastColoredTextBoxNS.TextChangedEventArgs e)
+        {
+            if (fastColoredTextBox3.Text != null)
+            {
+                VRChatify.AnimStr.Clear();
+                foreach (var s in fastColoredTextBox3.Text.SplitToLines())
+                {
+                    VRChatify.AnimStr.Add(s);
+                }
+            }
+        }
+
+        private void fastColoredTextBox3_Load(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void groupBox7_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog1 = new OpenFileDialog
+            {
+                InitialDirectory = $"{Environment.CurrentDirectory}",
+                Title = "Browse Text Files",
+
+                CheckFileExists = true,
+                CheckPathExists = true,
+                 
+                DefaultExt = "txt",
+                Filter = "txt files (*.txt)|*.txt",
+                FilterIndex = 2,
+                RestoreDirectory = true,
+
+                ReadOnlyChecked = true,
+                ShowReadOnly = true
+            };
+
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                test = File.ReadAllText(openFileDialog1.FileName);
+                if (!string.IsNullOrEmpty(test))
+                {
+                    fastColoredTextBox3.Text = test;
+                }
+            }
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            var saveFileDialog1 = new SaveFileDialog
+            {
+                InitialDirectory = Environment.CurrentDirectory,
+                Filter = string.Format("{0}Text files (*.txt)|*.txt|All files (*.*)|*.*", "ARG0"),
+                RestoreDirectory = true,
+                ShowHelp = true,
+                CheckFileExists = false
+            };
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+                File.WriteAllText(saveFileDialog1.FileName, fastColoredTextBox3.Text);
+        }
+
+        private void checkBox8_CheckedChanged_1(object sender, EventArgs e)
+        {
+            Lyrics = checkBox8.Checked;
+        }
+
+        private void checkBox11_CheckedChanged(object sender, EventArgs e)
+        {
+            InvisibleBox = checkBox11.Checked;
         }
     }
 }

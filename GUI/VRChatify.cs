@@ -9,6 +9,7 @@ using Microsoft.Diagnostics.Tracing.Session;
 using Windows.ApplicationModel.Store;
 using System.Runtime.CompilerServices;
 using System.Security.Claims;
+using System.Text;
 
 namespace VRChatify
 {
@@ -67,6 +68,8 @@ namespace VRChatify
         public static string ClanTag = "";
         public static List<string> ClanTagStrings;
         public static int ClanTagIndex = 0;
+        public static List<string> AnimStr = new List<string>();
+        public static int AnimIndex = 0;
         public const int EventID_D3D9PresentStart = 1;
         public const int EventID_DxgiPresentStart = 42;
 
@@ -80,7 +83,22 @@ namespace VRChatify
         static object sync = new object();
         private static string lastlog = "";
         private static int time = 0;
+        public static IEnumerable<string> SplitToLines(this string input)
+        {
+            if (input == null)
+            {
+                yield break;
+            }
 
+            using (System.IO.StringReader reader = new System.IO.StringReader(input))
+            {
+                string line;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    yield return line;
+                }
+            }
+        }
         public static void Custom()
         {
             long t1, t2;
@@ -92,18 +110,24 @@ namespace VRChatify
 
                 int count = MainWindow.vrcproc.QueryCount(t1, t2);
                 MainWindow.AppendToSB(mainWindow.richTextBox1.Text);
+                (mainWindow.richTextBox1.Text.Contains("{LYRICS}") == true ? new Action(() => MainWindow.oscMsg.Replace("{LYRICS}", $"{VRChatify.mediaManager.GetLyrics().Result}")) : new Action(MainWindow.joemethod))();
                 (mainWindow.richTextBox1.Text.Contains("{SPOTIFY}") == true ? new Action(() => MainWindow.oscMsg.Replace("{SPOTIFY}", $"{VRChatify.mediaManager.GetSongArtist()} - {VRChatify.mediaManager.GetSongName()}")) : new Action(MainWindow.joemethod))();
                 (mainWindow.richTextBox1.Text.Contains("{TIMESTAMP}") == true ? new Action(() => MainWindow.oscMsg.Replace("{TIMESTAMP}", $"{VMediaManager.currentSession.ControlSession.GetTimelineProperties().Position.ToString(@"mm\:ss")}/{VMediaManager.currentSession.ControlSession.GetTimelineProperties().EndTime.ToString(@"mm\:ss")}")) : new Action(MainWindow.joemethod))();
                 (mainWindow.richTextBox1.Text.Contains("{TABBED}") == true ? new Action(() => MainWindow.oscMsg.Replace("{TABBED}", $"{MainWindow.GetFocused()}")) : new Action(MainWindow.joemethod))();
-
-
+                (mainWindow.richTextBox1.Text.Contains("{ANIMATED}") == true ? new Action(() => MainWindow.oscMsg.Replace("{ANIMATED}", $"{MainWindow.currentanimstr}")) : new Action(MainWindow.joemethod))();
                 (mainWindow.richTextBox1.Text.Contains("{FPS}") == true ? new Action(() => MainWindow.oscMsg.Replace("{FPS}", $"{Math.Round((double)count / dt * 1000.0)}")) : new Action(MainWindow.joemethod))();
                 (mainWindow.richTextBox1.Text.Contains("{GPU}") == true ? new Action(() => MainWindow.oscMsg.Replace("{GPU}", $"{VRChatifyUtils.GetGPUUsage()}")) : new Action(MainWindow.joemethod))();
                 (mainWindow.richTextBox1.Text.Contains("{CPU}") == true ? new Action(() => MainWindow.oscMsg.Replace("{CPU}", $"{Math.Round(VRChatifyUtils.GetCpuUsage()).ToString()}")) : new Action(MainWindow.joemethod))();
                 (mainWindow.richTextBox1.Text.Contains("{RAM}") == true ? new Action(() => MainWindow.oscMsg.Replace("{RAM}", $"{VRChatifyUtils.GetRamUsage()}")) : new Action(MainWindow.joemethod))();
+                (mainWindow.richTextBox1.Text.Contains("{RAM-CAPACITY}") == true ? new Action(() => MainWindow.oscMsg.Replace("{RAM-CAPACITY}", $"{VRChatifyUtils.GetRamCapacity()}")) : new Action(MainWindow.joemethod))();
+                (mainWindow.richTextBox1.Text.Contains("{RAM-AVAILABLE}") == true ? new Action(() => MainWindow.oscMsg.Replace("{RAM-AVAILABLE}", $"{VRChatifyUtils.GetRamAvailable()}")) : new Action(MainWindow.joemethod))();
                 (mainWindow.richTextBox1.Text.Contains("{CLANTAG}") == true ? new Action(() => MainWindow.oscMsg.Replace("{CLANTAG}", $"{VRChatify.ClanTagStrings[VRChatify.ClanTagIndex]}")) : new Action(MainWindow.joemethod))();
                 (mainWindow.richTextBox1.Text.Contains("{TIME}") == true ? new Action(() => MainWindow.oscMsg.Replace("{TIME}", $"{DateTime.Now.ToString("h:mm:ss tt")}")) : new Action(MainWindow.joemethod))();
+                (mainWindow.richTextBox1.Text.Contains("{TABBEDV2}") == true ? new Action(() => MainWindow.oscMsg.Replace("{TABBEDV2}", $"{MainWindow.GetActiveWindow()}")) : new Action(MainWindow.joemethod))();
+                (mainWindow.richTextBox1.Text.Contains("{CLEARBOX}") == true ? new Action(() => MainWindow.oscMsg.Replace("{CLEARBOX}", $"\u0003\u001f")) : new Action(MainWindow.joemethod))();
+
                 VRChatify.SendChatMessage(MainWindow.oscMsg.ToString());
+
                 MainWindow.oscMsg.Clear();
 
 
@@ -111,8 +135,17 @@ namespace VRChatify
         }
         public static void SendChatMessage(string message)
         {
-            oscSender.Send(new OscMessage("/chatbox/input", message, true, true));
-            VRChatifyUtils.DebugLog("Updated ChatBox!");
+            if (MainWindow.InvisibleBox == true)
+            {
+                oscSender.Send(new OscMessage("/chatbox/input", message, true, false));
+
+            }
+            else
+            {
+                oscSender.Send(new OscMessage("/chatbox/input", message, true, false));
+
+            }
+            VRChatifyUtils.DebugLog($"Sent:\n{message}\n");
             if (time > 9)
             {
                 lastlog = "";

@@ -122,6 +122,56 @@ namespace VRChatify
                 return 0f;
             }
         }
+        public static string GetRamAvailable()
+        {
+            ManagementClass cimobject1 = new ManagementClass("Win32_PhysicalMemory");
+            ManagementObjectCollection moc1 = cimobject1.GetInstances();
+            double available = 0, capacity = 0;
+            foreach (ManagementObject mo1 in moc1)
+            {
+                capacity += ((Math.Round(Int64.Parse(mo1.Properties["Capacity"].Value.ToString()) / 1024 / 1024 / 1024.0, 1)));
+            }
+            moc1.Dispose();
+            cimobject1.Dispose();
+
+
+            ManagementClass cimobject2 = new ManagementClass("Win32_PerfFormattedData_PerfOS_Memory");
+            ManagementObjectCollection moc2 = cimobject2.GetInstances();
+            foreach (ManagementObject mo2 in moc2)
+            {
+                available += ((Math.Round(Int64.Parse(mo2.Properties["AvailableMBytes"].Value.ToString()) / 1024.0, 1)));
+
+            }
+            moc2.Dispose();
+            cimobject2.Dispose();
+            return $"{available}Gb";
+
+        }
+        public static string GetRamCapacity()
+        {
+            ManagementClass cimobject1 = new ManagementClass("Win32_PhysicalMemory");
+            ManagementObjectCollection moc1 = cimobject1.GetInstances();
+            double available = 0, capacity = 0;
+            foreach (ManagementObject mo1 in moc1)
+            {
+                capacity += ((Math.Round(Int64.Parse(mo1.Properties["Capacity"].Value.ToString()) / 1024 / 1024 / 1024.0, 1)));
+            }
+            moc1.Dispose();
+            cimobject1.Dispose();
+
+
+            ManagementClass cimobject2 = new ManagementClass("Win32_PerfFormattedData_PerfOS_Memory");
+            ManagementObjectCollection moc2 = cimobject2.GetInstances();
+            foreach (ManagementObject mo2 in moc2)
+            {
+                available += ((Math.Round(Int64.Parse(mo2.Properties["AvailableMBytes"].Value.ToString()) / 1024.0, 1)));
+
+            }
+            moc2.Dispose();
+            cimobject2.Dispose();
+            return $"{capacity}Gb";
+
+        }
         public static double GetRamUsage()
         {
             ManagementClass cimobject1 = new ManagementClass("Win32_PhysicalMemory");
